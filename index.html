@@ -1,197 +1,22 @@
-<!doctype html>
-<html lang="es">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Capital Quiz</title>
-    <style>
-        :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;}
-        body{display:grid;place-items:center;min-height:100vh;margin:0;background:#f3f4f6}
-        .card{background:#fff;padding:24px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.08);width:360px;max-width:94%}
-        h1{margin:0 0 8px;font-size:20px}
-        p.lead{margin:0 0 18px;color:#374151}
-        .country{font-weight:600;font-size:18px;margin:12px 0}
-        input[type="text"]{width:100%;padding:10px;border-radius:8px;border:1px solid #d1d5db;font-size:16px}
-        .row{display:flex;gap:8px;margin-top:12px}
-        button{flex:1;padding:10px;border-radius:8px;border:0;background:#111827;color:#fff;font-weight:600;cursor:pointer}
-        button.secondary{background:#e5e7eb;color:#111827}
-        .feedback{margin-top:12px;min-height:28px}
-        .score{margin-top:10px;font-size:14px;color:#6b7280}
-    </style>
-</head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="style.css"></head>
 <body>
-<main class="card" role="main">
-    <h1>Capital Quiz</h1>
-    <p class="lead">Escribe la capital del país que aparece. Tres ejemplos incluidos.</p>
-
-    <div id="quiz">
-        <div class="country" id="country">Country</div>
-        <input id="answer" type="text" autocomplete="off" placeholder="Type capital and press Check" />
-
-        <div class="row">
-            <button id="check">Check</button>
-            <button id="next" class="secondary">Next</button>
+    <main>
+        <div id="main-content">
+            <p class="regular-content">cual es la capital de: </p>
+            <p class="blod-content">España</p>
+            <input id="texto-del-pais" type="text">
+            <button id="botton-check">Check</button>
         </div>
 
-        <div class="feedback" id="feedback" aria-live="polite"></div>
-        <div class="score" id="score">0 / 0 correct</div>
-    </div>
+        <div class="correct-contetn">
 
-    <p style="margin-top:14px;font-size:12px;color:#9ca3af">Hint: respuestas sin tildes y sin diferenciar mayúsculas funcionan.</p>
-</main>
-
-<script>
-    (function(){
-        // Three example countries. You can add more.
-        const items = [
-            { country: 'Países Bajos', capital: 'Ámsterdam' },
-            { country: 'Andorra', capital: 'Andorra la Vieja' },
-            { country: 'Grecia', capital: 'Atenas' },
-            { country: 'Serbia', capital: 'Belgrado' },
-            { country: 'Alemania', capital: 'Berlín' },
-            { country: 'Suiza', capital: 'Berna' },
-            { country: 'Eslovaquia', capital: 'Bratislava' },
-            { country: 'Bélgica', capital: 'Bruselas' },
-            { country: 'Rumanía', capital: 'Bucarest' },
-            { country: 'Hungría', capital: 'Budapest' },
-            { country: 'Moldavia', capital: 'Chisináu' },
-            { country: 'Ciudad del Vaticano', capital: 'Ciudad del Vaticano' },
-            { country: 'Dinamarca', capital: 'Copenhague' },
-            { country: 'Isla de Man', capital: 'Douglas' },
-            { country: 'Irlanda', capital: 'Dublín' },
-            { country: 'Suecia', capital: 'Estocolmo' },
-            { country: 'Reino Unido', capital: 'Gibraltar' },
-            { country: 'Finlandia', capital: 'Helsinki' },
-            { country: 'Ucrania', capital: 'Kiev' },
-            { country: 'Malta', capital: 'La Valeta' },
-            { country: 'Portugal', capital: 'Lisboa' },
-            { country: 'Eslovenia', capital: 'Liubliana' },
-            { country: 'Reino Unido', capital: 'Londres' },
-            { country: 'Noruega (Svalbard)', capital: 'Longyearbyen' },
-            { country: 'Luxemburgo', capital: 'Luxemburgo' },
-            { country: 'España', capital: 'Madrid' },
-            { country: 'Islas Åland', capital: 'Mariehamn' },
-            { country: 'Bielorrusia', capital: 'Minsk' },
-            { country: 'Mónaco', capital: 'Mónaco-Ville' },
-            { country: 'Rusia', capital: 'Moscú' },
-            { country: 'Chipre', capital: 'Nicosia' },
-            { country: 'Noruega', capital: 'Oslo' },
-            { country: 'Francia', capital: 'París' },
-            { country: 'Montenegro', capital: 'Podgorica' },
-            { country: 'Chequia', capital: 'Praga' },
-            { country: 'Kosovo', capital: 'Pristina' },
-            { country: 'Islandia', capital: 'Reikiavik' },
-            { country: 'Letonia', capital: 'Riga' },
-            { country: 'Italia', capital: 'Roma' },
-            { country: 'Jersey', capital: 'Saint Helier' },
-            { country: 'Guernsey', capital: 'Saint Peter Port' },
-            { country: 'San Marino', capital: 'San Marino' },
-            { country: 'Bosnia y Herzegovina', capital: 'Sarajevo' },
-            { country: 'Macedonia del Norte', capital: 'Skopie' },
-            { country: 'Bulgaria', capital: 'Sofía' },
-            { country: 'Estonia', capital: 'Tallin' },
-            { country: 'Albania', capital: 'Tirana' },
-            { country: 'Islas Feroe', capital: 'Tórshavn' },
-            { country: 'Liechtenstein', capital: 'Vaduz' },
-            { country: 'Polonia', capital: 'Varsovia' },
-            { country: 'Austria', capital: 'Viena' },
-            { country: 'Lituania', capital: 'Vilna' },
-            { country: 'Croacia', capital: 'Zagreb' },
-        ];
-
-
-        let order = shuffle(Array.from(items.keys()));
-        let idx = 0;
-        let correct = 0;
-        let attempts = 0;
-
-        const elCountry = document.getElementById('country');
-        const elAnswer = document.getElementById('answer');
-        const elCheck = document.getElementById('check');
-        const elNext = document.getElementById('next');
-        const elFeedback = document.getElementById('feedback');
-        const elScore = document.getElementById('score');
-
-        function normalize(s){
-            return s.trim().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu,'');
-        }
-
-        function shuffle(a){
-            for(let i=a.length-1;i>0;i--){
-                const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];
-            }
-            return a;
-        }
-
-        function render(){
-            if(idx >= order.length){
-                elCountry.textContent = 'Finished';
-                elFeedback.textContent = `Final score: ${correct} / ${attempts} correct`;
-                elAnswer.disabled = true;
-                elCheck.disabled = true;
-                elNext.disabled = false;
-                elNext.textContent = 'Restart';
-                return;
-            }
-            const it = items[order[idx]];
-            elCountry.textContent = it.country;
-            elAnswer.value = '';
-            elAnswer.disabled = false;
-            elCheck.disabled = false;
-            elNext.disabled = false;
-            elNext.textContent = 'Next';
-            elFeedback.textContent = '';
-            elAnswer.focus();
-            updateScore();
-        }
-
-        function updateScore(){
-            elScore.textContent = `${correct} / ${attempts} correct`;
-        }
-
-        elCheck.addEventListener('click', ()=>{
-            if(idx >= order.length) return;
-            const it = items[order[idx]];
-            const user = normalize(elAnswer.value);
-            const expected = normalize(it.capital);
-            attempts++;
-            if(user === expected){
-                correct++;
-                elFeedback.textContent = 'Correct.';
-            } else if(user === ''){
-                attempts--; // do not count empty
-                elFeedback.textContent = 'Write an answer first.';
-            } else {
-                elFeedback.textContent = `Wrong. Correct: ${it.capital}`;
-            }
-            elAnswer.disabled = true;
-            elCheck.disabled = true;
-            updateScore();
-        });
-
-        elNext.addEventListener('click', ()=>{
-            if(idx >= order.length){
-                // restart
-                order = shuffle(Array.from(items.keys()));
-                idx = 0; correct=0; attempts=0;
-                elAnswer.disabled = false;
-                elCheck.disabled = false;
-                render();
-                return;
-            }
-            idx++;
-            render();
-        });
-
-        // allow Enter to check and Escape to clear
-        elAnswer.addEventListener('keydown',(e)=>{
-            if(e.key === 'Enter') elCheck.click();
-            if(e.key === 'Escape') elAnswer.value = '';
-        });
-
-        // initial render
-        render();
-    })();
-</script>
+        </div>
+    </main>
+    <script src="script.js"></script>
 </body>
 </html>
